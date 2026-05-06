@@ -1,0 +1,23 @@
+{
+  "name": "ai-flow",
+  "version": "0.1.0",
+  "description": "AI-Flow 企业 AI 工作流系统 — 基于 superpowers 的团队 AI 驱动开发工具",
+  "bin": {
+    "ai-flow": "bin/ai-flow.js",
+    "aiflow": "bin/ai-flow.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "skills/",
+    "agents/",
+    "commands/",
+    "workflows/",
+    "templates/",
+    "hooks/"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

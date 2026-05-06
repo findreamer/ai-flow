@@ -1,0 +1,16 @@
+{
+  "ai-flow": {
+    "version": "0.1.0",
+    "installedAt": "",
+    "git": {
+      "workflow": "gitflow",
+      "mainBranch": "main",
+      "developBranch": "develop",
+      "aiFlowBranch": "develop-ai-flow"
+    },
+    "feishu": {
+      "chatId": "",
+      "docFolderId": ""
+    }
+  }
+}
