@@ -21,10 +21,14 @@
     "test:watch": "node --test --watch test/**/*.test.js",
     "test:coverage": "node --test --test-coverage test/**/*.test.js",
     "test:cli": "node --test test/cli.test.js",
-    "prepublishOnly": "echo 'Skipping build (JS only project)'"
+    "release": "release-it"
   },
   "engines": {
     "node": ">=18.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^11.0.0",
+    "release-it": "^20.0.1"
+  }
 }
