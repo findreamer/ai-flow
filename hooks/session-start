@@ -1,2 +1,11 @@
-# hooks/session-start
-# AI-Flow bootstrap - 每次会话启动时加载团队配置
+#!/bin/bash
+# AI-Flow session-start hook
+# Loads team configuration and workflow context at session start
+
+# Load AI-Flow status indicator
+AI_FLOW_STATUS=$(npx ai-flow --status 2>/dev/null)
+if [ $? -eq 0 ]; then
+  echo "[ai-flow] Team configuration loaded"
+else
+  echo "[ai-flow] Not initialized in this project. Run: npx ai-flow init"
+fi

@@ -863,7 +863,7 @@ git commit -m "feat: P2 开发 Agent 定义 + 模板 + aiflow command"
 - `templates/rules/review-checklist.md`
 - `templates/rules/git-workflow.md`
 
-- [ ] **步骤 1：创建 settings.json 模板**
+- [x] **步骤 1：创建 settings.json 模板**
 
 ```json
 {
@@ -884,7 +884,7 @@ git commit -m "feat: P2 开发 Agent 定义 + 模板 + aiflow command"
 }
 ```
 
-- [ ] **步骤 2：创建 CLAUDE.md 模板**
+- [x] **步骤 2：创建 CLAUDE.md 模板**
 
 ```markdown
 # AI-Flow 团队配置
@@ -902,9 +902,21 @@ git commit -m "feat: P2 开发 Agent 定义 + 模板 + aiflow command"
 所有 AI 生成的文档存放在 `.ai-flow/output/iterations/` 目录下
 ```
 
-- [ ] **步骤 3：创建规则模板**（略，与现有 superpowers skills 配合）
+- [x] **步骤 3：创建规则模板**
 
-- [ ] **步骤 4：创建 hooks/session-start**
+从 [everything-claude-code](https://github.com/affaan-m/everything-claude-code) 复制了完整的规则模板：
+
+- `templates/rules/coding-standards.md` - 团队编码规范
+- `templates/rules/review-checklist.md` - 团队审查清单
+- `templates/rules/git-workflow.md` - Git 工作流规范
+- `templates/presets/typescript/common/` - TypeScript 通用规则 (5 files)
+- `templates/presets/typescript/typescript/` - TypeScript 语言规则 (5 files)
+- `templates/presets/python/common/` - Python 通用规则 (5 files)
+- `templates/presets/python/python/` - Python 语言规则 (5 files)
+- `templates/presets/java/common/` - Java 通用规则 (5 files)
+- `templates/presets/java/java/` - Java 语言规则 (5 files)
+
+- [x] **步骤 4：创建 hooks/session-start**
 
 ```
 # hooks/session-start
@@ -929,7 +941,7 @@ P1 (任务 5) → 7 个企业 skills（已完成）
   ↓
 P2 (任务 6-8) → Agent 定义 + 命令（已完成）
   ↓
-P3 (任务 9) → 模板 + hook
+P3 (任务 9) → 模板 + hook（已完成）
 ```
 
 ---

@@ -62,9 +62,13 @@ async function run(args) {
       log(`Installed ${techStack} preset rules`);
     }
 
+    const templateClaudePath = path.join(pkgRoot, 'templates', 'CLAUDE.md');
     const ClaudeMdPath = path.join(toolDir, 'CLAUDE.md');
     if (!fileExists(ClaudeMdPath)) {
-      writeText(ClaudeMdPath, generateBootstrap(aiTools, techStack));
+      const baseContent = fileExists(templateClaudePath)
+        ? fs.readFileSync(templateClaudePath, 'utf8')
+        : generateBootstrap(aiTools, techStack);
+      writeText(ClaudeMdPath, baseContent + '\n' + generateBootstrap(aiTools, techStack));
     } else {
       const existing = fs.readFileSync(ClaudeMdPath, 'utf8');
       if (!existing.includes('# AI-Flow')) appendText(ClaudeMdPath, '\n' + generateBootstrap(aiTools, techStack));
