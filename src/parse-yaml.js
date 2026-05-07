@@ -46,8 +46,8 @@ function parseYaml(content) {
       else if (t === 'auto_continue: true') stage.auto_continue = true;
       else if (t.startsWith('human_gate:')) { stage.human_gate = { title: '', notify: '', actions: [] }; inGate = true; inFailure = false; }
       else if (t.startsWith('on_failure:')) { stage.on_failure = { route_to: '', max_retries: 3 }; inFailure = true; inGate = false; }
-      else if (inGate && t.startsWith('title:')) stage.human_gate.title = t.slice(6).trim().replace(/"/g, '');
-      else if (inGate && t.startsWith('notify:')) stage.human_gate.notify = t.slice(7).trim();
+      else if (inGate && t.startsWith('title:')) stage.human_gate.title = t.slice(6).trim().replace(/^["']|["']$/g, '');
+      else if (inGate && t.startsWith('notify:')) stage.human_gate.notify = t.slice(7).trim().replace(/^["']|["']$/g, '');
       else if (inGate && t.startsWith('actions:')) {
         const m = t.match(/\[(.+)\]/);
         stage.human_gate.actions = m ? m[1].split(',').map(s => s.trim().replace(/["']/g, '')) : [];
