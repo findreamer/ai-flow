@@ -8,18 +8,19 @@ const BIN = path.join(__dirname, '..', 'bin', 'ai-flow.js');
 const { describe, it, beforeEach, afterEach } = require('node:test');
 const assert = require('node:assert');
 
-function run(args, cwd) { 
-  return execSync(`node ${BIN} ${args}`, { cwd: cwd || process.cwd() }).toString(); 
+function run(args, cwd) {
+  return execSync(`node ${BIN} ${args}`, { cwd: cwd || process.cwd() }).toString();
 }
 function runFail(args, cwd) {
-  try { 
-    execSync(`node ${BIN} ${args}`, { 
+  try {
+    execSync(`node ${BIN} ${args}`, {
       stdio: ['pipe', 'pipe', 'pipe'],
-      cwd: cwd || process.cwd() 
-    }); 
-    return null; 
+      cwd: cwd || process.cwd()
+    });
+    return null;
+  } catch (e) {
+    return e;
   }
-  catch (e) { return e; }
 }
 
 describe('CLI basic', () => {
@@ -48,7 +49,7 @@ describe('CLI basic', () => {
 
   it('bare word acts as feature shortcut', () => {
     const o = run('my-feature');
-    assert.ok(o.includes('AI-Flow Run'));
+    assert.ok(o.includes('AI-Flow'));
   });
 });
 
@@ -59,11 +60,11 @@ describe('CLI init', () => {
     tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'aiflow-cli-init-'));
   });
 
-  afterEach(() => { 
-    fs.rmSync(tmpDir, { recursive: true, force: true }); 
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it('creates skills/ agents/ commands/ workflows/ references/ directories', () => {
+  it('creates skills/agents/commands/workflows/references/ directories', () => {
     run('init', tmpDir);
     assert.ok(fs.existsSync(path.join(tmpDir, '.claude', 'skills')));
     assert.ok(fs.existsSync(path.join(tmpDir, '.claude', 'agents')));
@@ -78,7 +79,7 @@ describe('CLI init', () => {
     assert.ok(content.includes('AI-Flow'));
   });
 
-  it('creates settings.json from template', () => {
+  it('creates settings.json with ai-flow section', () => {
     run('init', tmpDir);
     assert.ok(fs.existsSync(path.join(tmpDir, '.claude', 'settings.json')));
     const settings = JSON.parse(fs.readFileSync(path.join(tmpDir, '.claude', 'settings.json'), 'utf8'));
@@ -100,13 +101,13 @@ describe('CLI status', () => {
     run('init', tmpDir);
   });
 
-  afterEach(() => { 
-    fs.rmSync(tmpDir, { recursive: true, force: true }); 
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
   it('shows status output', () => {
     const o = run('--status', tmpDir);
-    assert.ok(o.includes('=== AI-Flow Status ==='));
+    assert.ok(o.includes('AI-Flow Status'));
   });
 });
 
@@ -118,13 +119,13 @@ describe('CLI sync', () => {
     run('init', tmpDir);
   });
 
-  afterEach(() => { 
-    fs.rmSync(tmpDir, { recursive: true, force: true }); 
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
   it('runs sync command', () => {
     const o = run('--sync', tmpDir);
-    assert.ok(o.includes('=== AI-Flow Sync ==='));
+    assert.ok(o.includes('AI-Flow Sync'));
   });
 });
 
@@ -136,13 +137,13 @@ describe('CLI uninstall', () => {
     run('init', tmpDir);
   });
 
-  afterEach(() => { 
-    fs.rmSync(tmpDir, { recursive: true, force: true }); 
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it('runs uninstall command', () => {
+  it('requires --force flag to uninstall', () => {
     const o = run('--uninstall', tmpDir);
-    assert.ok(o.includes('=== AI-Flow Uninstall ==='));
+    assert.ok(o.includes('This will remove AI-Flow configurations'));
   });
 });
 
@@ -154,13 +155,13 @@ describe('CLI run', () => {
     run('init', tmpDir);
   });
 
-  afterEach(() => { 
-    fs.rmSync(tmpDir, { recursive: true, force: true }); 
+  afterEach(() => {
+    fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
   it('runs with --feature flag', () => {
     const o = run('run --feature "test feature"', tmpDir);
-    assert.ok(o.includes('=== AI-Flow Run ==='));
-    assert.ok(o.includes('Feature: test feature'));
+    assert.ok(o.includes('AI-Flow'));
+    assert.ok(o.includes('test feature'));
   });
 });

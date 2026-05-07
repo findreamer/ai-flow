@@ -35,52 +35,52 @@ describe('commands/uninstall.js', () => {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   });
 
-  it('removes skills directory', async () => {
-    await run();
+  it('removes skills directory with --force', async () => {
+    await run(['--force']);
     const skillsDir = path.join(tmpDir, '.claude', 'skills');
     assert.ok(!fs.existsSync(skillsDir));
   });
 
-  it('removes agents directory', async () => {
-    await run();
+  it('removes agents directory with --force', async () => {
+    await run(['--force']);
     const agentsDir = path.join(tmpDir, '.claude', 'agents');
     assert.ok(!fs.existsSync(agentsDir));
   });
 
-  it('removes commands directory', async () => {
-    await run();
+  it('removes commands directory with --force', async () => {
+    await run(['--force']);
     const commandsDir = path.join(tmpDir, '.claude', 'commands');
     assert.ok(!fs.existsSync(commandsDir));
   });
 
-  it('removes workflows directory', async () => {
-    await run();
+  it('removes workflows directory with --force', async () => {
+    await run(['--force']);
     const workflowsDir = path.join(tmpDir, '.claude', 'workflows');
     assert.ok(!fs.existsSync(workflowsDir));
   });
 
-  it('removes references directory', async () => {
-    await run();
+  it('removes references directory with --force', async () => {
+    await run(['--force']);
     const referencesDir = path.join(tmpDir, '.claude', 'references');
     assert.ok(!fs.existsSync(referencesDir));
   });
 
-  it('removes rules directory', async () => {
-    await run();
+  it('removes rules directory with --force', async () => {
+    await run(['--force']);
     const rulesDir = path.join(tmpDir, '.claude', 'rules');
     assert.ok(!fs.existsSync(rulesDir));
   });
 
-  it('removes ai-flow section from settings.json', async () => {
-    await run();
+  it('removes ai-flow section from settings.json with --force', async () => {
+    await run(['--force']);
     const settingsPath = path.join(tmpDir, '.claude', 'settings.json');
     const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
     assert.ok(!settings['ai-flow']);
     assert.strictEqual(settings.other, 'config');
   });
 
-  it('removes AI-Flow bootstrap from CLAUDE.md', async () => {
-    await run();
+  it('removes AI-Flow bootstrap from CLAUDE.md with --force', async () => {
+    await run(['--force']);
     const claudePath = path.join(tmpDir, '.claude', 'CLAUDE.md');
     const content = fs.readFileSync(claudePath, 'utf8');
     assert.ok(!content.includes('# AI-Flow Bootstrap'));

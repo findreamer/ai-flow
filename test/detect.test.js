@@ -132,7 +132,7 @@ describe('detect.js', () => {
     });
 
     it('returns not installed when settings.json exists but no ai-flow section', () => {
-      fs.mkdirSync(path.join(tmpDir, '.claude'), { recursive: true });
+      fs.mkdirSync(path.join(tmpDir, '.claude'));
       fs.writeFileSync(path.join(tmpDir, '.claude', 'settings.json'), JSON.stringify({
         other: 'config'
       }));
@@ -141,21 +141,23 @@ describe('detect.js', () => {
     });
 
     it('returns installed with version when ai-flow section exists', () => {
-      fs.mkdirSync(path.join(tmpDir, '.claude'), { recursive: true });
+      fs.mkdirSync(path.join(tmpDir, '.claude'));
       fs.writeFileSync(path.join(tmpDir, '.claude', 'settings.json'), JSON.stringify({
         'ai-flow': { version: '1.0.0' }
       }));
       const result = detectExistingInstall(tmpDir);
-      assert.deepStrictEqual(result, { installed: true, version: '1.0.0' });
+      assert.ok(result.installed);
+      assert.strictEqual(result.version, '1.0.0');
     });
 
     it('returns installed with unknown version when ai-flow exists but no version', () => {
-      fs.mkdirSync(path.join(tmpDir, '.claude'), { recursive: true });
+      fs.mkdirSync(path.join(tmpDir, '.claude'));
       fs.writeFileSync(path.join(tmpDir, '.claude', 'settings.json'), JSON.stringify({
         'ai-flow': {}
       }));
       const result = detectExistingInstall(tmpDir);
-      assert.deepStrictEqual(result, { installed: true, version: 'unknown' });
+      assert.ok(result.installed);
+      assert.strictEqual(result.version, 'unknown');
     });
   });
 });

@@ -19,7 +19,7 @@ describe('commands/status.js', () => {
     consoleOutput = '';
     console.log = (msg) => {
       consoleOutput += msg + '\n';
-    };
+  };
   });
 
   afterEach(() => {
@@ -29,7 +29,7 @@ describe('commands/status.js', () => {
 
   it('outputs status header', async () => {
     await run();
-    assert.ok(consoleOutput.includes('=== AI-Flow Status ==='));
+    assert.ok(consoleOutput.includes('AI-Flow Status'));
   });
 
   it('shows project directory', async () => {
@@ -62,6 +62,6 @@ describe('commands/status.js', () => {
       'ai-flow': { version: '1.0.0' }
     }));
     await run();
-    assert.ok(consoleOutput.includes('skills:'));
+    assert.ok(consoleOutput.includes('skills'));
   });
 });

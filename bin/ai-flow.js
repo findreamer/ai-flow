@@ -5,35 +5,52 @@ const fs = require('fs');
 const pkg = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
 const args = process.argv.slice(2);
 
-const KNOWN_COMMANDS = ['init', 'run', '--sync', '--uninstall', '--status', '--help', '-h', '--version', '--tool'];
+const KNOWN_FLAGS = [
+  '--help', '-h', '--version', '--verbose', '--force', '--clean',
+  '--tool', '--feature', '--workflow', '--list', '--json'
+];
 const command = args[0];
-const featureName = command && !command.startsWith('--') && !KNOWN_COMMANDS.includes(command) ? command : null;
+const isFlag = command && command.startsWith('--');
+const isKnownCommand = ['init', 'run'].includes(command);
+const featureName = command && !isFlag && !isKnownCommand ? command : null;
 
 if (args[0] === '--help' || args[0] === '-h') {
   console.log(`AI-Flow v${pkg.version} — Enterprise AI Workflow System
 
 Usage:
-  aiflow "<feature-name>"          启动功能开发工作流
-  ai-flow init                     初始化当前项目
-  ai-flow run --feature "<name>"   同上（兼容写法）
+  aiflow "<feature-name>"          Start feature development workflow
+  aiflow init                     Initialize current project
+  aiflow run --feature "<name>"   Alternative to above (compatible)
+
+Commands:
+  init              Initialize project
+  run               Run workflow
 
 Options:
-  --help, -h        显示帮助信息
-  --version         显示版本号
-  --tool <name>     指定 AI 工具 (claude-code|opencode|cursor|all)
-  --sync            同步团队最新配置
-  --uninstall       卸载 AI-Flow 配置
-  --status          查看安装状态
-  --verbose         显示详细日志
+  --help, -h        Show help
+  --version         Show version
+  --tool <name>     Specify AI tool (claude-code|opencode|cursor|trae|hermes|aider)
+  --sync            Sync team configurations
+  --uninstall       Uninstall AI-Flow (use --force to confirm)
+  --status          Check installation status
+  --verbose         Show verbose output
+  --force           Force operation (init, uninstall)
+  --clean           Clean before sync
+  --workflow <name> Use specific workflow
+  --list            List available workflows
+  --json            Output status as JSON
 
 Examples:
-  aiflow "用户登录"
-  npx aiflow "用户登录"
-  npx ai-flow init
-  npx ai-flow init --tool claude-code
-  npx ai-flow --sync
-  npx ai-flow --status
-  npx ai-flow --uninstall
+  aiflow "User Login"
+  npx aiflow "User Login"
+  npx aiflow init
+  npx aiflow init --tool claude-code
+  npx aiflow --sync
+  npx aiflow --sync --clean
+  npx aiflow --status
+  npx aiflow --status --verbose
+  npx aiflow --list
+  npx aiflow --uninstall --force
 `);
   process.exit(0);
 }
@@ -44,8 +61,29 @@ if (args[0] === '--version') {
 }
 
 async function main() {
-  if (featureName && !args.includes('--feature')) {
-    await require('../src/commands/run').run(['--feature', featureName]);
+  if (args.includes('--sync')) {
+    await require('../src/commands/sync').run(args);
+    return;
+  }
+  
+  if (args.includes('--uninstall')) {
+    await require('../src/commands/uninstall').run(args);
+    return;
+  }
+  
+  if (args.includes('--status')) {
+    await require('../src/commands/status').run(args);
+    return;
+  }
+  
+  if (args.includes('--list')) {
+    await require('../src/commands/run').run(args);
+    return;
+  }
+
+  if (featureName) {
+    const remainingArgs = args.filter(a => a !== featureName);
+    await require('../src/commands/run').run(['--feature', featureName, ...remainingArgs]);
     return;
   }
 
@@ -57,15 +95,6 @@ async function main() {
     case 'run':
       await require('../src/commands/run').run(args);
       break;
-    case '--sync':
-      await require('../src/commands/sync').run();
-      break;
-    case '--uninstall':
-      await require('../src/commands/uninstall').run();
-      break;
-    case '--status':
-      await require('../src/commands/status').run();
-      break;
     default:
       console.error(`Error: Unknown command "${cmd}". Run "ai-flow --help" for usage.`);
       process.exit(1);
@@ -74,5 +103,6 @@ async function main() {
 
 main().catch((err) => {
   console.error(`Error: ${err.message}`);
+  console.error(err.stack);
   process.exit(1);
 });
